@@ -5,6 +5,7 @@ import baseImage from "./Images/basex5.jpg";
 import birdImage from "./Images/pajaroaletamedia.png";
 import tubeImage from "./Images/pipe-green.png";
 import ding from "./audio/point.ogg";
+import hitSound from "./audio/hit.wav"; 
 import "./fonts.css";
 
 // Constants for game parameters
@@ -55,6 +56,7 @@ const Tube = ({ tube }) => (
 // Main App component
 function App() {
   // State variables
+  const hitAudioRef = useState(null); 
   const [basePosition, setBasePosition] = useState(0);
   const [birdPosition, setBirdPosition] = useState(window.innerHeight / 2);
   const [birdVelocity, setBirdVelocity] = useState(0);
@@ -136,6 +138,10 @@ function App() {
       if (birdRect.bottom >= baseRect.top) {
         setGameOver(true);
         cancelAnimationFrame(animateRef.current);
+
+        if(hitAudioRef.current){
+          hitAudioRef.current.play(); 
+        }
       }
     };
 
@@ -316,6 +322,7 @@ function App() {
       )}
       {/* Audio */}
       <audio ref={audioRef} />
+      <audio ref={hitAudioRef} src={hitSound} preload="auto" />
     </div>
   );
 }

@@ -1,21 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.c69e87d2.css",
-    "main.js": "/static/js/main.52c1bd71.js",
+    "main.css": "/static/css/main.4f58e6c2.css",
+    "main.js": "/static/js/main.17d901f2.js",
     "static/js/453.61b23143.chunk.js": "/static/js/453.61b23143.chunk.js",
-    "static/media/MALDITA_RAMONA_-_CHLY_feat._Montana_Recordzzz.mp3": "/static/media/MALDITA_RAMONA_-_CHLY_feat._Montana_Recordzzz.5c6acfff4dd9fb63920e.mp3",
-    "static/media/pen2.png": "/static/media/pen2.24db48310dde8d9bf3fa.png",
     "static/media/bgdia.png": "/static/media/bgdia.a76ced21c7b95c035b30.png",
     "static/media/basex5.jpg": "/static/media/basex5.5f1ba7ea0e50b8c11c67.jpg",
-    "static/media/ramon1.png": "/static/media/ramon1.bb5769a8065464efe8cd.png",
+    "static/media/point.ogg": "/static/media/point.25b7658563967e60ca23.ogg",
     "static/media/FUENTE.TTF": "/static/media/FUENTE.41ab3bb3e47ae6c9d524.TTF",
     "index.html": "/index.html",
-    "main.c69e87d2.css.map": "/static/css/main.c69e87d2.css.map",
-    "main.52c1bd71.js.map": "/static/js/main.52c1bd71.js.map",
+    "main.4f58e6c2.css.map": "/static/css/main.4f58e6c2.css.map",
+    "main.17d901f2.js.map": "/static/js/main.17d901f2.js.map",
     "453.61b23143.chunk.js.map": "/static/js/453.61b23143.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c69e87d2.css",
-    "static/js/main.52c1bd71.js"
+    "static/css/main.4f58e6c2.css",
+    "static/js/main.17d901f2.js"
   ]
 }
