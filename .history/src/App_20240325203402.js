@@ -119,6 +119,13 @@ function App() {
   }, [handleKeyPress]);
 
   useEffect(() => {
+    if (score > highestScore) {
+      setHighestScore(score);
+      localStorage.setItem("highestScore", score);
+    }
+  }, [score, highestScore]);
+
+  useEffect(() => {
   if (score > highestScore) {
     setHighestScore(score);
     localStorage.setItem("highestScore", score);

@@ -3,8 +3,7 @@ import "./App.css";
 import backgroundImage from "./Images/bgdia.png";
 import baseImage from "./Images/basex5.jpg";
 import birdImage from "./Images/pajaroaletamedia.png";
-import tubeImage from "./Images/pipe-green.png";
-import ding from "./audio/point.ogg";
+import tubeImage from "./Images/pipe-green.png";\import
 import "./fonts.css";
 
 // Constants for game parameters
@@ -24,10 +23,7 @@ const generateRandomTubePosition = () => {
 
 // Component for rendering tubes
 const Tube = ({ tube }) => (
-  <div
-    className="tube"
-    style={{ position: "absolute", left: tube.x, bottom: 0 }}
-  >
+  <div className="tube" style={{ position: "absolute", left: tube.x, bottom: 0 }}>
     <img
       className="tube-upper"
       src={tubeImage}
@@ -67,41 +63,31 @@ function App() {
     return savedHighestScore ? parseInt(savedHighestScore) : 0;
   });
   const [tubes, setTubes] = useState([]);
-
+  
   // Refs
   const baseRef = useRef(null);
   const animateRef = useRef(null);
   const audioRef = useRef(null);
 
   // Event handlers
-  const handleKeyDown = useCallback(
-    (e) => {
-      if (!gameStarted && e.keyCode === 32) {
-        setGameStarted(true);
-        if (audioRef.current) {
-          audioRef.current.play();
-        }
-      } else if (gameStarted && !gamePaused && e.keyCode === 32) {
-        setBirdVelocity(7);
-      } else if (
-        (e.keyCode === 80 || e.keyCode === 27 || e.keyCode === 32) &&
-        gameStarted &&
-        !gameOver
-      ) {
-        setGamePaused((prevPaused) => !prevPaused);
+  const handleKeyDown = useCallback((e) => {
+    if (!gameStarted && e.keyCode === 32) {
+      setGameStarted(true);
+      if (audioRef.current) {
+        audioRef.current.play();
       }
-    },
-    [gameStarted, gamePaused, gameOver]
-  );
+    } else if (gameStarted && !gamePaused && e.keyCode === 32) {
+      setBirdVelocity(7);
+    } else if ((e.keyCode === 80 || e.keyCode === 27 || e.keyCode === 32) && gameStarted && !gameOver) {
+      setGamePaused((prevPaused) => !prevPaused);
+    }
+  }, [gameStarted, gamePaused, gameOver]);
 
-  const handleKeyPress = useCallback(
-    (e) => {
-      if (e.keyCode === 32 && gameOver) {
-        restartGame();
-      }
-    },
-    [gameOver]
-  );
+  const handleKeyPress = useCallback((e) => {
+    if (e.keyCode === 32 && gameOver) {
+      restartGame();
+    }
+  }, [gameOver]);
 
   // Effects
   useEffect(() => {
@@ -119,15 +105,11 @@ function App() {
   }, [handleKeyPress]);
 
   useEffect(() => {
-  if (score > highestScore) {
-    setHighestScore(score);
-    localStorage.setItem("highestScore", score);
-    if (audioRef.current) {
-      audioRef.current.src = ding;
-      audioRef.current.play();
+    if (score > highestScore) {
+      setHighestScore(score);
+      localStorage.setItem("highestScore", score);
     }
-  }
-}, [score, highestScore]);
+  }, [score, highestScore]);
 
   useEffect(() => {
     const detectBaseCollision = () => {
@@ -142,29 +124,24 @@ function App() {
     const animate = () => {
       setBirdVelocity((prevVelocity) => prevVelocity + gravity);
       setBirdPosition((prevPosition) => prevPosition + birdVelocity);
-      setBasePosition(
-        (prevPosition) => (prevPosition + 1) % (window.innerWidth + 100)
-      );
+      setBasePosition((prevPosition) => (prevPosition + 1) % (window.innerWidth + 100));
       setTubes((prevTubes) => {
         let incrementScore = false;
-        const newTubes = prevTubes
-          .map((tube) => {
-            const newX = tube.x - tubeSpeed;
-            if (newX < 100 && tube.x >= 100) {
-              incrementScore = true;
-            }
-            return { ...tube, x: newX };
-          })
-          .filter((tube) => tube.x > -tubeWidth);
+        const newTubes = prevTubes.map((tube) => {
+          const newX = tube.x - tubeSpeed;
+          if (newX < 100 && tube.x >= 100) {
+            incrementScore = true;
+            audioRef.current.src = song;
+      audioRef.current.load();
+          }
+          return { ...tube, x: newX };
+        }).filter((tube) => tube.x > -tubeWidth);
 
         if (incrementScore) {
           setScore((prevScore) => prevScore + 1);
         }
 
-        if (
-          newTubes.length === 0 ||
-          window.innerWidth - newTubes[newTubes.length - 1].x >= tubeGap
-        ) {
+        if (newTubes.length === 0 || window.innerWidth - newTubes[newTubes.length - 1].x >= tubeGap) {
           newTubes.push(generateRandomTubePosition());
         }
 
@@ -176,18 +153,10 @@ function App() {
       // Check collision with tubes
       const birdRect = document.querySelector(".bird").getBoundingClientRect();
       tubes.forEach((tube) => {
-        const upperTubeRect = document
-          .querySelector(".tube-upper")
-          .getBoundingClientRect();
-        const lowerTubeRect = document
-          .querySelector(".tube-lower")
-          .getBoundingClientRect();
-        if (
-          birdRect.right > tube.x &&
-          birdRect.left < tube.x + tubeWidth &&
-          (birdRect.top < upperTubeRect.bottom ||
-            birdRect.bottom > lowerTubeRect.top)
-        ) {
+        const upperTubeRect = document.querySelector(".tube-upper").getBoundingClientRect();
+        const lowerTubeRect = document.querySelector(".tube-lower").getBoundingClientRect();
+        if (birdRect.right > tube.x && birdRect.left < tube.x + tubeWidth &&
+          (birdRect.top < upperTubeRect.bottom || birdRect.bottom > lowerTubeRect.top)) {
           setGameOver(true);
           cancelAnimationFrame(animateRef.current);
         }
@@ -229,28 +198,19 @@ function App() {
   return (
     <div className="App">
       {/* Overlay for pause and game over */}
-      <div
-        className={`overlay ${gamePaused || gameOver ? "overlay-dark" : ""}`}
-        style={{ display: gamePaused ? "block" : "none" }}
-      />
+      <div className={`overlay ${gamePaused || gameOver ? "overlay-dark" : ""}`} style={{ display: gamePaused ? "block" : "none" }} />
       {gamePaused || gameOver ? (
-        <div
-          className="overlay"
-          style={{
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            zIndex: 9,
-          }}
-        />
+        <div className="overlay" style={{
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 9,
+        }} />
       ) : null}
-      <div
-        className="overlay"
-        style={{ display: gamePaused ? "block" : "none" }}
-      />
+      <div className="overlay" style={{ display: gamePaused ? "block" : "none" }} />
       {/* Background */}
       <img src={backgroundImage} alt="Background" className="background" />
       {/* Tubes */}
@@ -263,22 +223,8 @@ function App() {
       </div>
       {/* Base container */}
       <div className="base-container">
-        <img
-          src={baseImage}
-          alt="Base"
-          className="base"
-          style={{ left: `${basePosition}px`, bottom: "0", zIndex: 1 }}
-          ref={baseRef}
-        />
-        <img
-          src={baseImage}
-          alt="Base"
-          className="base"
-          style={{
-            left: `${basePosition - window.innerWidth - 100}px`,
-            bottom: "0",
-          }}
-        />
+        <img src={baseImage} alt="Base" className="base" style={{ left: `${basePosition}px`, bottom: "0", zIndex: 1 }} ref={baseRef} />
+        <img src={baseImage} alt="Base" className="base" style={{ left: `${basePosition - window.innerWidth - 100}px`, bottom: "0" }} />
       </div>
       {/* Pause message */}
       {gamePaused && (
@@ -289,12 +235,7 @@ function App() {
       )}
       {/* Bird */}
       {gameStarted && !gameOver && (
-        <img
-          src={birdImage}
-          alt="Bird"
-          className="bird"
-          style={{ left: "100px", bottom: `${birdPosition}px` }}
-        />
+        <img src={birdImage} alt="Bird" className="bird" style={{ left: "100px", bottom: `${birdPosition}px` }} />
       )}
       {/* Game over message */}
       {gameOver && (
@@ -307,7 +248,7 @@ function App() {
       {/* Start message */}
       {!gameStarted && !gameOver && (
         <div className="start-message">
-          <h1>FLAPPY BIRD</h1>
+          <h1>FLAPPY RAMON</h1>
           <div className="bird-container">
             <img src={birdImage} alt="Bird" className="start-bird" />
           </div>

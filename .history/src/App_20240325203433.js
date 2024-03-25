@@ -118,6 +118,8 @@ function App() {
     };
   }, [handleKeyPress]);
 
+  
+
   useEffect(() => {
   if (score > highestScore) {
     setHighestScore(score);

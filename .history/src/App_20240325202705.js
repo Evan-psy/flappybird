@@ -4,7 +4,7 @@ import backgroundImage from "./Images/bgdia.png";
 import baseImage from "./Images/basex5.jpg";
 import birdImage from "./Images/pajaroaletamedia.png";
 import tubeImage from "./Images/pipe-green.png";
-import ding from "./audio/point.ogg";
+import ding from "./audio/point.wav";
 import "./fonts.css";
 
 // Constants for game parameters
@@ -117,6 +117,20 @@ function App() {
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, [handleKeyPress]);
+
+  useEffect(() => {
+    if (score > highestScore) {
+      setHighestScore(score);
+      localStorage.setItem("highestScore", score);
+    }
+  }, [score, highestScore]);
+
+  useEffect(() => {
+    if () {
+      audioRef.current.src = ding;
+      audioRef.current.load();
+    }
+  }, []);
 
   useEffect(() => {
   if (score > highestScore) {
@@ -307,7 +321,7 @@ function App() {
       {/* Start message */}
       {!gameStarted && !gameOver && (
         <div className="start-message">
-          <h1>FLAPPY BIRD</h1>
+          <h1>FLAPPY RAMON</h1>
           <div className="bird-container">
             <img src={birdImage} alt="Bird" className="start-bird" />
           </div>

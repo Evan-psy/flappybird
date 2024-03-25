@@ -129,9 +129,7 @@
 }
 
 .start-bird {
-  width: 80px;
-  height: auto;
-
+  width: 85px;
   animation: breathing 3s infinite;
   margin-bottom: 8%;
   margin-top: 5%;
