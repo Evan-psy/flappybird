@@ -1,0 +1,156 @@
+/* App.css */
+
+/* Estilo para el contenedor principal */
+.App {
+  position: relative;
+  width: auto;
+  height: 742px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Estilo para la imagen de fondo */
+.background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* App.css */
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.overlay-dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Color negro con opacidad */
+  z-index: 9;
+  /* Asegura que el overlay esté sobre todos los elementos */
+}
+
+
+.base-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-size: 1000px 50px;
+  /* Tiling Effect */
+}
+
+/* Modification: Removed conflicting styles */
+.base {
+  position: absolute;
+  bottom: 0;
+}
+
+.bird {
+  position: absolute;
+  width: 80px;
+  height: auto;
+}
+
+.tube {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 52px;
+}
+
+.tube img {
+  position: absolute;
+  width: 100%;
+}
+
+.tube .tube-upper {
+  transform: rotate(180deg);
+  width: 52px;
+}
+
+.tube .tube-lower {
+  width: 52px;
+}
+
+.start-message {
+  text-align: center;
+  font-size: larger;
+  font-family: 'FlappyBird';
+  color: white;
+  margin-top: 7%;
+}
+
+.score-display {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: larger;
+  color: #ffffff;
+  font-family: 'FlappyBird', Arial, sans-serif;
+  z-index: 10;
+}
+
+
+@keyframes breathing {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.8);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.start-bird {
+  width: 150px;
+  height: 150px;
+  animation: breathing 3s infinite;
+  margin-bottom: 8%;
+  margin-top: 5%;
+}
+
+.start-message {
+  z-index: 10;
+}
+
+.pause-message {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  color: white;
+  font-family: 'FlappyBird';
+  font-size: larger;
+  cursor: default;
+}
+
+/*Norway TE VOY A HACER EL BUENO HP*/

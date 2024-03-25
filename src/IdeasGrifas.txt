@@ -1,0 +1,10 @@
+Ideas grifas: 
+- Luego de la mecanica del juego empezar a cambiar el fondo por la sala de ramirez o las ruinas (Faltan fotos de eso)
+- Intercambiar el fondo entre plumas y bongs (Sera? Por mi ya que paja nomas dejar los carts)
+
+
+To do List: 
+- Agregar que cuando toque el piso pierda el juego *Done*
+- highest and current score display *Done*
+- Cuando estes en game over no puedas poner pausa o que al darle no solo space sino tmb esc puedas reinciar el juego *Done*
+- Importar el archivo para implementar la musica del juego *Done*
