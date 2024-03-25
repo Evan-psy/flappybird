@@ -180,7 +180,12 @@ function App() {
     };
   }, [gameStarted, gamePaused, birdVelocity, tubes, gameOver, birdPosition]);
 
-  
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.src = song;
+      audioRef.current.load();
+    }
+  }, []);
 
   // Restart the game
   const restartGame = () => {

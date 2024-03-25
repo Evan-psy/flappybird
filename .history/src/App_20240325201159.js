@@ -180,7 +180,7 @@ function App() {
     };
   }, [gameStarted, gamePaused, birdVelocity, tubes, gameOver, birdPosition]);
 
-  
+/
 
   // Restart the game
   const restartGame = () => {

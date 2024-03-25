@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 import backgroundImage from "./Images/bgdia.png";
 import baseImage from "./Images/basex5.jpg";
-import birdImage from "./Images/pajaroaletamedia.png";
-import tubeImage from "./Images/pipe-green.png";
+import birdImage from "./Images/";
+import tubeImage from "./Images/pipes/pipe-green.png";
 import "./fonts.css";
 
 // Constants for game parameters
@@ -180,7 +180,12 @@ function App() {
     };
   }, [gameStarted, gamePaused, birdVelocity, tubes, gameOver, birdPosition]);
 
-  
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.src = song;
+      audioRef.current.load();
+    }
+  }, []);
 
   // Restart the game
   const restartGame = () => {
