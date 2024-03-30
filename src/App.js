@@ -57,6 +57,7 @@ const Tube = ({ tube, index }) => (
 function App() {
   // State variables
   const hitAudioRef = useRef(null); 
+  const dingAudioRef = useRef(null);
   const [basePosition, setBasePosition] = useState(0);
   const [birdPosition, setBirdPosition] = useState(window.innerHeight / 2);
   const [birdVelocity, setBirdVelocity] = useState(0);
@@ -80,7 +81,7 @@ function App() {
     (e) => {
       if (!gameStarted && e.keyCode === 32) {
         setGameStarted(true);
-        playAudio(audioRef); // Using playAudio function
+        playAudio(dingAudioRef); // Using playAudio function
 
       } else if (gameStarted && !gamePaused && e.keyCode === 32) {
         setBirdVelocity(7);
@@ -122,11 +123,11 @@ function App() {
   useEffect(() => {
   if (score > highestScore) {
     setHighestScore(score);
-    playAudio(audioRef); 
+    playAudio(dingAudioRef); 
     localStorage.setItem("highestScore", score);
     if (audioRef.current) {
       audioRef.current.src = ding;
-      playAudio(audioRef);
+      playAudio(dingAudioRef);
 
     }
   }
@@ -159,6 +160,7 @@ function App() {
             const newX = tube.x - tubeSpeed;
             if (newX < 100 && tube.x >= 100) {
               incrementScore = true;
+              playAudio(dingAudioRef); 
             }
             return { ...tube, x: newX };
           })
@@ -166,6 +168,7 @@ function App() {
 
         if (incrementScore) {
           setScore((prevScore) => prevScore + 1);
+          playAudio(dingAudioRef);
         }
 
         if (
@@ -228,9 +231,9 @@ function App() {
     setTubes([]);
   };
 
-  const playAudio = (audioElement) => {
-    if (audioElement && audioElement.current) {
-      audioElement.current.play().catch((error) => {
+  const playAudio = (audioElementRef) => {
+    if (audioElementRef && audioElementRef.current) {
+      audioElementRef.current.play().catch((error) => {
         console.error("Error playing sound:", error);
       });
     }
@@ -328,7 +331,7 @@ function App() {
         </div>
       )}
       {/* Audio */}
-      <audio ref={audioRef} src={ding} preload="auto" />
+      <audio ref={dingAudioRef} src={ding} preload="auto" />
       <audio ref={hitAudioRef} src={hitSound} preload="auto" />
     </div>
   );
