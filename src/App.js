@@ -24,13 +24,13 @@ const generateRandomTubePosition = () => {
 };
 
 // Component for rendering tubes
-const Tube = ({ tube }) => (
+const Tube = ({ tube, index }) => (
   <div
     className="tube"
     style={{ position: "absolute", left: tube.x, bottom: 0 }}
   >
     <img
-      className="tube-upper"
+      className={`tube-upper tube-upper-${index}`}
       src={tubeImage}
       alt="Tube"
       style={{
@@ -40,7 +40,7 @@ const Tube = ({ tube }) => (
       }}
     />
     <img
-      className="tube-lower"
+      className={`tube-lower tube-lower-${index}`}
       src={tubeImage}
       alt="Tube"
       style={{
@@ -56,7 +56,7 @@ const Tube = ({ tube }) => (
 // Main App component
 function App() {
   // State variables
-  const hitAudioRef = useState(null); 
+  const hitAudioRef = useRef(null); 
   const [basePosition, setBasePosition] = useState(0);
   const [birdPosition, setBirdPosition] = useState(window.innerHeight / 2);
   const [birdVelocity, setBirdVelocity] = useState(0);
@@ -80,9 +80,8 @@ function App() {
     (e) => {
       if (!gameStarted && e.keyCode === 32) {
         setGameStarted(true);
-        if (audioRef.current) {
-          audioRef.current.play();
-        }
+        playAudio(audioRef); // Using playAudio function
+
       } else if (gameStarted && !gamePaused && e.keyCode === 32) {
         setBirdVelocity(7);
       } else if (
@@ -123,10 +122,12 @@ function App() {
   useEffect(() => {
   if (score > highestScore) {
     setHighestScore(score);
+    playAudio(audioRef); 
     localStorage.setItem("highestScore", score);
     if (audioRef.current) {
       audioRef.current.src = ding;
-      audioRef.current.play();
+      playAudio(audioRef);
+
     }
   }
 }, [score, highestScore]);
@@ -140,7 +141,7 @@ function App() {
         cancelAnimationFrame(animateRef.current);
 
         if(hitAudioRef.current){
-          hitAudioRef.current.play(); 
+          playAudio(hitAudioRef); // Play hit sound on collision
         }
       }
     };
@@ -181,23 +182,19 @@ function App() {
 
       // Check collision with tubes
       const birdRect = document.querySelector(".bird").getBoundingClientRect();
-      tubes.forEach((tube) => {
-        const upperTubeRect = document
-          .querySelector(".tube-upper")
-          .getBoundingClientRect();
-        const lowerTubeRect = document
-          .querySelector(".tube-lower")
-          .getBoundingClientRect();
+      tubes.forEach((tube, index) => {
+        const upperTubeRect = document.querySelector(`.tube-upper-${index}`).getBoundingClientRect();
+        const lowerTubeRect = document.querySelector(`.tube-lower-${index}`).getBoundingClientRect();
         if (
-          birdRect.right > tube.x &&
-          birdRect.left < tube.x + tubeWidth &&
-          (birdRect.top < upperTubeRect.bottom ||
-            birdRect.bottom > lowerTubeRect.top)
-        ) {
-          setGameOver(true);
-          cancelAnimationFrame(animateRef.current);
-        }
-      });
+    birdRect.right > tube.x &&
+    birdRect.left < tube.x + tubeWidth &&
+    (birdRect.top < upperTubeRect.bottom ||
+     birdRect.bottom > lowerTubeRect.top)
+    ) {
+    setGameOver(true);
+    cancelAnimationFrame(animateRef.current);
+    }
+    });
 
       // Check collision with base
       const baseHeight = 50;
@@ -231,6 +228,15 @@ function App() {
     setTubes([]);
   };
 
+  const playAudio = (audioElement) => {
+    if (audioElement && audioElement.current) {
+      audioElement.current.play().catch((error) => {
+        console.error("Error playing sound:", error);
+      });
+    }
+  };
+  
+
   // Render JSX
   return (
     <div className="App">
@@ -261,7 +267,8 @@ function App() {
       <img src={backgroundImage} alt="Background" className="background" />
       {/* Tubes */}
       {tubes.map((tube, index) => (
-        <Tube key={index} tube={tube} />
+        <Tube key={index} tube={tube} index={index} />
+
       ))}
       {/* Score display */}
       <div className="score-display">
@@ -321,7 +328,7 @@ function App() {
         </div>
       )}
       {/* Audio */}
-      <audio ref={audioRef} />
+      <audio ref={audioRef} src={ding} preload="auto" />
       <audio ref={hitAudioRef} src={hitSound} preload="auto" />
     </div>
   );
