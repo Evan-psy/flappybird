@@ -2,15 +2,17 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 import backgroundImage from "./Images/bgdia.png";
 import baseImage from "./Images/basex5.jpg";
-import birdImage from "./Images/pajaroaletamedia.png";
-import tubeImage from "./Images/pipe-green.png";
+import birdImage from "./Images/pajaroaletabaja.png";
+import birdFlyingImage from "./Images/pajaroaletaalta.png"; // Nueva imagen para el pájaro volando
+import tubeImage from "./Images/botpipe.png";
 import ding from "./audio/point.ogg";
-import hitSound from "./audio/hit.wav"; 
+import hitSound from "./audio/hit.wav";
 import "./fonts.css";
+import Flap from "./audio/wing.ogg"
 
 // Constants for game parameters
 const gravity = -0.4;
-const tubeWidth = 52;
+const tubeWidth = 82;
 const tubeHeight = 320;
 const tubeGap = 500;
 const tubeSpeed = 5;
@@ -56,7 +58,7 @@ const Tube = ({ tube, index }) => (
 // Main App component
 function App() {
   // State variables
-  const hitAudioRef = useRef(null); 
+  const hitAudioRef = useRef(null);
   const dingAudioRef = useRef(null);
   const [basePosition, setBasePosition] = useState(0);
   const [birdPosition, setBirdPosition] = useState(window.innerHeight / 2);
@@ -70,11 +72,25 @@ function App() {
     return savedHighestScore ? parseInt(savedHighestScore) : 0;
   });
   const [tubes, setTubes] = useState([]);
+  const [isFlying, setIsFlying] = useState(false); // New state to control bird flying animation
+  const [flapSprite, setFlapSprite] = useState(true); // true para aleta alta, false para aleta baja
+  
 
   // Refs
   const baseRef = useRef(null);
   const animateRef = useRef(null);
-  const audioRef = useRef(null);
+  const flapAudioRef = useRef(null);
+
+
+  // Function to handle bird jump
+  const handleJump = () => {
+    if (!gameOver) {
+      playAudio(flapAudioRef); // Reproduce el sonido "flap"
+      setIsFlying(true); // Set isFlying state to true to animate bird flying
+      setBirdVelocity(7); // Set bird velocity to make it jump
+      setTimeout(() => setIsFlying(false), 200); // After a short delay, set isFlying state to false
+    }
+  };
 
   // Event handlers
   const handleKeyDown = useCallback(
@@ -82,9 +98,8 @@ function App() {
       if (!gameStarted && e.keyCode === 32) {
         setGameStarted(true);
         playAudio(dingAudioRef); // Using playAudio function
-
       } else if (gameStarted && !gamePaused && e.keyCode === 32) {
-        setBirdVelocity(7);
+        handleJump(); // Call handleJump function when spacebar is pressed
       } else if (
         (e.keyCode === 80 || e.keyCode === 27 || e.keyCode === 32) &&
         gameStarted &&
@@ -93,7 +108,7 @@ function App() {
         setGamePaused((prevPaused) => !prevPaused);
       }
     },
-    [gameStarted, gamePaused, gameOver]
+    [gameStarted, gamePaused, gameOver, handleJump]
   );
 
   const handleKeyPress = useCallback(
@@ -121,31 +136,59 @@ function App() {
   }, [handleKeyPress]);
 
   useEffect(() => {
-  if (score > highestScore) {
-    setHighestScore(score);
-    playAudio(dingAudioRef); 
-    localStorage.setItem("highestScore", score);
-    if (audioRef.current) {
-      audioRef.current.src = ding;
+    if (score > highestScore) {
+      setHighestScore(score);
       playAudio(dingAudioRef);
-
+      localStorage.setItem("highestScore", score);
     }
-  }
-}, [score, highestScore]);
+  }, [score, highestScore]);
+
+  // Agrega un efecto para alternar entre los sprites con un intervalo de tiempo
+  useEffect(() => {
+    const flapInterval = setInterval(() => {
+      setFlapSprite((prevFlapSprite) => !prevFlapSprite);
+    }, 150); // Intervalo de 200 milisegundos entre cambios de sprite
+
+    return () => clearInterval(flapInterval); // Limpia el intervalo cuando el componente se desmonta
+  }, []);
 
   useEffect(() => {
     const detectBaseCollision = () => {
-      const birdRect = document.querySelector(".bird").getBoundingClientRect();
-      const baseRect = baseRef.current.getBoundingClientRect();
-      if (birdRect.bottom >= baseRect.top) {
-        setGameOver(true);
-        cancelAnimationFrame(animateRef.current);
+  const birdRect = document.querySelector(".bird").getBoundingClientRect();
+  const baseRect = baseRef.current.getBoundingClientRect();
+  if (birdRect.bottom >= baseRect.top) {
+    setGameOver(true);
+    cancelAnimationFrame(animateRef.current);
 
-        if(hitAudioRef.current){
-          playAudio(hitAudioRef); // Play hit sound on collision
-        }
+    if (hitAudioRef.current) {
+      playAudio(hitAudioRef); // Play hit sound on collision with base
+    }
+  }
+
+  // Check collision with tubes
+  tubes.forEach((tube, index) => {
+    const upperTubeRect = document
+      .querySelector(`.tube-upper-${index}`)
+      .getBoundingClientRect();
+    const lowerTubeRect = document
+      .querySelector(`.tube-lower-${index}`)
+      .getBoundingClientRect();
+    if (
+      birdRect.right > tube.x &&
+      birdRect.left < tube.x + tubeWidth &&
+      (birdRect.top < upperTubeRect.bottom ||
+        birdRect.bottom > lowerTubeRect.top)
+    ) {
+      setGameOver(true);
+      cancelAnimationFrame(animateRef.current);
+      
+      if (hitAudioRef.current) {
+        playAudio(hitAudioRef); // Play hit sound on collision with tubes
       }
-    };
+    }
+  });
+};
+
 
     const animate = () => {
       setBirdVelocity((prevVelocity) => prevVelocity + gravity);
@@ -160,7 +203,7 @@ function App() {
             const newX = tube.x - tubeSpeed;
             if (newX < 100 && tube.x >= 100) {
               incrementScore = true;
-              playAudio(dingAudioRef); 
+              playAudio(dingAudioRef);
             }
             return { ...tube, x: newX };
           })
@@ -183,23 +226,25 @@ function App() {
 
       detectBaseCollision();
 
-      // Check collision with tubes
       const birdRect = document.querySelector(".bird").getBoundingClientRect();
       tubes.forEach((tube, index) => {
-        const upperTubeRect = document.querySelector(`.tube-upper-${index}`).getBoundingClientRect();
-        const lowerTubeRect = document.querySelector(`.tube-lower-${index}`).getBoundingClientRect();
+        const upperTubeRect = document
+          .querySelector(`.tube-upper-${index}`)
+          .getBoundingClientRect();
+        const lowerTubeRect = document
+          .querySelector(`.tube-lower-${index}`)
+          .getBoundingClientRect();
         if (
-    birdRect.right > tube.x &&
-    birdRect.left < tube.x + tubeWidth &&
-    (birdRect.top < upperTubeRect.bottom ||
-     birdRect.bottom > lowerTubeRect.top)
-    ) {
-    setGameOver(true);
-    cancelAnimationFrame(animateRef.current);
-    }
-    });
+          birdRect.right > tube.x &&
+          birdRect.left < tube.x + tubeWidth &&
+          (birdRect.top < upperTubeRect.bottom ||
+            birdRect.bottom > lowerTubeRect.top)
+        ) {
+          setGameOver(true);
+          cancelAnimationFrame(animateRef.current);
+        }
+      });
 
-      // Check collision with base
       const baseHeight = 50;
       const birdBottomPosition = birdPosition + 50 - 1; // Assuming bird height as 50
       if (birdBottomPosition >= window.innerHeight - baseHeight) {
@@ -238,7 +283,6 @@ function App() {
       });
     }
   };
-  
 
   // Render JSX
   return (
@@ -271,11 +315,10 @@ function App() {
       {/* Tubes */}
       {tubes.map((tube, index) => (
         <Tube key={index} tube={tube} index={index} />
-
       ))}
       {/* Score display */}
       <div className="score-display">
-        <h1>SCORE: {score}</h1>
+        <h1>{score}</h1>
       </div>
       {/* Base container */}
       <div className="base-container">
@@ -306,7 +349,7 @@ function App() {
       {/* Bird */}
       {gameStarted && !gameOver && (
         <img
-          src={birdImage}
+          src={isFlying ? birdFlyingImage : birdImage} // Change image based on bird flying state
           alt="Bird"
           className="bird"
           style={{ left: "100px", bottom: `${birdPosition}px` }}
@@ -325,7 +368,12 @@ function App() {
         <div className="start-message">
           <h1>FLAPPY BIRD</h1>
           <div className="bird-container">
-            <img src={birdImage} alt="Bird" className="start-bird" />
+            <img
+              src={flapSprite ? birdFlyingImage : birdImage}
+              alt="Bird"
+              className="start-bird"
+              style={{ left: "100px", bottom: `${birdPosition}px` }}
+            />{" "}
           </div>
           <h1>PRESS SPACE TO START</h1>
         </div>
@@ -333,6 +381,8 @@ function App() {
       {/* Audio */}
       <audio ref={dingAudioRef} src={ding} preload="auto" />
       <audio ref={hitAudioRef} src={hitSound} preload="auto" />
+      <audio ref={flapAudioRef} src={Flap} preload="auto" />
+
     </div>
   );
 }

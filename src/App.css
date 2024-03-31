@@ -12,18 +12,11 @@
 /* Estilo para la imagen de fondo */
 .background {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* App.css */
-.background {
-  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
   z-index: -1;
 }
 
@@ -49,7 +42,6 @@
   /* Asegura que el overlay esté sobre todos los elementos */
 }
 
-
 .base-container {
   position: absolute;
   bottom: 0;
@@ -67,7 +59,7 @@
 
 .bird {
   position: absolute;
-  width: 80px;
+  width: 70px;
   height: auto;
 }
 
@@ -77,21 +69,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  width: 52px;
+  width: 57px;
 }
 
 .tube img {
   position: absolute;
-  width: 100%;
+  width: 150%;
 }
 
 .tube .tube-upper {
   transform: rotate(180deg);
-  width: 52px;
+  width: 150%;
 }
 
 .tube .tube-lower {
-  width: 52px;
+  width: 150%;
 }
 
 .start-message {
@@ -99,7 +91,7 @@
   font-size: larger;
   font-family: 'FlappyBird';
   color: white;
-  margin-top: 7%;
+  margin-top: 13%;
 }
 
 .score-display {
@@ -107,12 +99,11 @@
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: larger;
+  font-size: x-large;
   color: #ffffff;
   font-family: 'FlappyBird', Arial, sans-serif;
   z-index: 10;
 }
-
 
 @keyframes breathing {
   0% {
@@ -131,7 +122,6 @@
 .start-bird {
   width: 80px;
   height: auto;
-
   animation: breathing 3s infinite;
   margin-bottom: 8%;
   margin-top: 5%;
@@ -154,4 +144,20 @@
   cursor: default;
 }
 
-/*Norway TE VOY A HACER EL BUENO HP*/
+/* Norway, TE VOY A HACER EL BUENO HP */
+.tube img {
+  position: absolute;
+  width: 200%;
+  /* Increased width */
+}
+
+.tube .tube-upper {
+  transform: rotate(180deg);
+  width: 200%;
+  /* Increased width */
+}
+
+.tube .tube-lower {
+  width: 200%;
+  /* Increased width */
+}
