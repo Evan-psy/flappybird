@@ -1,6 +1,6 @@
-**Flappy Bird Clone in React**
+# Flappy Bird Clone in React
 
-![Flappy Bird Clone](flappy_bird_screenshot.png)
+![Flappy Bird Clone](./src/Images/FlappyGH.png)
 
 This project is a simple clone of the popular game Flappy Bird, implemented using React. It was created for educational purposes to understand the fundamentals behind building a game like Flappy Bird using React.
 
