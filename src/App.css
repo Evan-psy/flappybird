@@ -3,13 +3,15 @@
 /* Estilo para el contenedor principal */
 .App {
   position: relative;
-  width: auto;
-  height: 742px;
+  width: 100%;
+  /* Ajustar al ancho completo de la ventana */
+  height: 100vh;
+  /* Utilizar el 100% del alto de la ventana */
   margin: 0 auto;
   overflow: hidden;
 }
 
-/* Estilo para la imagen de fondo */
+
 .background {
   position: absolute;
   top: 0;
@@ -19,6 +21,13 @@
   object-fit: cover;
   z-index: -1;
 }
+
+.tube img {
+  position: absolute;
+  width: 100%;
+  /* Escalar al 100% del contenedor padre */
+}
+
 
 .overlay {
   position: fixed;
@@ -96,14 +105,17 @@
 
 .score-display {
   position: absolute;
-  top: 20px;
+  top: 2%;
+  /* Ejemplo de uso de porcentaje para la posición */
   left: 50%;
   transform: translateX(-50%);
-  font-size: x-large;
+  font-size: 2em;
+  /* Tamaño de fuente relativo */
   color: #ffffff;
   font-family: 'FlappyBird', Arial, sans-serif;
   z-index: 10;
 }
+
 
 @keyframes breathing {
   0% {
@@ -160,4 +172,18 @@
 .tube .tube-lower {
   width: 200%;
   /* Increased width */
+}
+
+.bird-up {
+  transform: rotate(-15deg);
+  /* Inclinar hacia arriba */
+  transition: transform 0.3s ease;
+  /* Transición suave */
+}
+
+.bird-down {
+  transform: rotate(15deg);
+  /* Inclinar hacia abajo */
+  transition: transform 0.3s ease;
+  /* Transición suave */
 }
