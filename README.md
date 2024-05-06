@@ -1,6 +1,6 @@
 # Flappy Bird Clone in React
 
-![Flappy Bird Clone](./src/Images/FlappyGH.png)
+![image](https://github.com/rickypcyt/flappybird/assets/105986682/10f38130-fe62-41f8-9167-5a87843d80b7)
 
 This project is a simple clone of the popular game Flappy Bird, implemented using React. It was created for educational purposes to understand the fundamentals behind building a game like Flappy Bird using React.
 
@@ -36,8 +36,6 @@ This project is a simple clone of the popular game Flappy Bird, implemented usin
    ```
 2. Open your browser and go to `http://localhost:3000` to play the game.
 
-## Credits
-This project was created by [Your Name] as a learning exercise. The Flappy Bird game concept is originally created by Dong Nguyen.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
