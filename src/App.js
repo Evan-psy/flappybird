@@ -11,11 +11,11 @@ import Flap from "./audio/wing.ogg";
 import "./fonts.css";
 
 // Constants for game parameters
-const gravity = -0.4;
+const gravity = -0.1;
 const tubeWidth = 82;
 const tubeHeight = 320;
-const tubeGap = 500;
-const tubeSpeed = 5;
+const tubeGap = 1000;
+const tubeSpeed = 3;
 
 // Function to generate random tube position
 const generateRandomTubePosition = () => {
@@ -85,7 +85,7 @@ function App() {
     if (!gameOver) {
       playAudio(flapAudioRef); // Reproduce el sonido "flap"
       setIsFlying(true); // Set isFlying state to true to animate bird flying
-      setBirdVelocity(7); // Set bird velocity to make it jump
+      setBirdVelocity(4); // Set bird velocity to make it jump
       setTimeout(() => setIsFlying(false), 200); // After a short delay, set isFlying state to false
     }
   };
@@ -206,7 +206,7 @@ function App() {
     };
 
     const animate = () => {
-      setBirdVelocity((prevVelocity) => prevVelocity + gravity);
+      setBirdVelocity((prevVelocity) => prevVelocity <= -1.5 ? prevVelocity : prevVelocity + gravity);
       setBirdPosition((prevPosition) => prevPosition + birdVelocity);
       setBasePosition((prevPosition) => (prevPosition + tubeSpeed -1) % window.innerWidth);
 
